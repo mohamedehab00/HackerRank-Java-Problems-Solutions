@@ -27,29 +27,35 @@ public class Solution {
             this.tail = null;
         }
 
-        public void insertNode(int nodeData) {
-            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
+    }
 
-            if (this.head == null) {
-                this.head = node;
-            } else {
-                this.tail.next = node;
+    public static void printSinglyLinkedList(SinglyLinkedListNode node, String sep, BufferedWriter bufferedWriter)
+            throws IOException {
+        while (node != null) {
+            bufferedWriter.write(String.valueOf(node.data));
+
+            node = node.next;
+
+            if (node != null) {
+                bufferedWriter.write(sep);
             }
-
-            this.tail = node;
         }
     }
 
-    static void printLinkedList(SinglyLinkedListNode head) {
-        while (head != null) {
-            System.out.println(head.data);
-            head = head.next;
+    static SinglyLinkedListNode insertNodeAtHead(SinglyLinkedListNode llist, int data) {
+        if (llist == null) {
+            return new SinglyLinkedListNode(data);
         }
+        SinglyLinkedListNode head = new SinglyLinkedListNode(data);
+        head.next = llist;
+        return head;
     }
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
         SinglyLinkedList llist = new SinglyLinkedList();
 
         int llistCount = scanner.nextInt();
@@ -59,10 +65,15 @@ public class Solution {
             int llistItem = scanner.nextInt();
             scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-            llist.insertNode(llistItem);
+            SinglyLinkedListNode llist_head = insertNodeAtHead(llist.head, llistItem);
+
+            llist.head = llist_head;
         }
 
-        printLinkedList(llist.head);
+        printSinglyLinkedList(llist.head, "\n", bufferedWriter);
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
 
         scanner.close();
     }
